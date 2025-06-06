@@ -1,0 +1,13 @@
+<form action="{% url 'kgraph:increment_category' category_id %}" method="post">
+  {% csrf_token %}
+  <fieldset>
+    <label for="id_choice">{{ question }}:</label>
+    <select name="choice" id="id_choice" required>
+      <option value="correct_answer">{{ correct_answer }}</option>
+      <option value="wrong_answer_1">{{ wrong_answer_1 }}</option>
+      <option value="wrong_answer_2">{{ wrong_answer_2 }}</option>
+    </select>
+  </fieldset>
+  <input type="submit" value="Submit" />
+  <a href="{{ website_link }}" target="_blank">{{ website_link }}</a>
+</form>

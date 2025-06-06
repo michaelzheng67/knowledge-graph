@@ -1,0 +1,20 @@
+<ul>
+  {% for info in category.info_set.all %}
+  <li>{{ info.info }}</li>
+  <a href="{% url 'kgraph:delete_info' category.id info.id %}">
+    <button>Delete Info</button>
+  </a>
+  {% endfor %}
+
+  <a href="{% url 'kgraph:delete_category' category.id %}">
+    <button>Delete Category</button>
+  </a>
+
+  <a href="{% url 'kgraph:create_info' category.id %}">
+    <button>Create Info</button>
+  </a>
+
+  <a href="{% url 'kgraph:quiz_me' category.id %}">
+    <button>Quiz Me</button>
+  </a>
+</ul>

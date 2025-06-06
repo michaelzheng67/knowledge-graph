@@ -1,0 +1,54 @@
+<head>
+  <!-- Vis.js CDN -->
+  <link
+    href="https://unpkg.com/vis-network/styles/vis-network.css"
+    rel="stylesheet"
+  />
+  <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+</head>
+
+{% if nodes %}
+<body>
+  <div id="network"></div>
+
+  <script>
+    const nodes = new vis.DataSet({{ nodes|safe }});
+    const edges = new vis.DataSet({{ edges|safe }});
+    const topicToId = {{ topic_to_id|safe }};
+
+    const container = document.getElementById('network');
+    const data = { nodes, edges };
+    const options = {
+      interaction: { hover: true },
+      nodes: { shape: "dot", size: 16 },
+      edges: {
+        arrows: "none",
+        font: { align: "middle" },
+        smooth: true,
+      },
+      physics: {
+        stabilization: false,
+        barnesHut: { springLength: 200 },
+      },
+    };
+
+    const network = new vis.Network(container, data, options);
+
+    // 🔗 Make nodes clickable using topic string
+    network.on("click", function (params) {
+      if (params.nodes.length === 1) {
+        const category_id = params.nodes[0];
+        if (category_id) {
+          window.location.href = `/kgraph/categories/${category_id}`;
+        }
+      }
+    });
+  </script>
+</body>
+{% else %}
+<p>No categories are available.</p>
+{% endif %}
+
+<a href="{% url 'kgraph:create_category' %}">
+  <button>Create Category</button>
+</a>

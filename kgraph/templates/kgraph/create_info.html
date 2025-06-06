@@ -1,0 +1,8 @@
+<form action="{% url 'kgraph:create_new_info' category_id %}" method="post">
+  {% csrf_token %}
+  <fieldset>
+    <label for="id_info">Description:</label>
+    <input type="text" name="info" id="id_info" required />
+  </fieldset>
+  <input type="submit" value="Submit" />
+</form>
