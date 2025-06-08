@@ -1,13 +1,58 @@
-<form action="{% url 'kgraph:increment_category' category_id %}" method="post">
-  {% csrf_token %}
-  <fieldset>
-    <label for="id_choice">{{ question }}:</label>
-    <select name="choice" id="id_choice" required>
-      <option value="correct_answer">{{ correct_answer }}</option>
-      <option value="wrong_answer_1">{{ wrong_answer_1 }}</option>
-      <option value="wrong_answer_2">{{ wrong_answer_2 }}</option>
-    </select>
-  </fieldset>
-  <input type="submit" value="Submit" />
-  <a href="{{ website_link }}" target="_blank">{{ website_link }}</a>
-</form>
+<head>
+  <!-- Tailwind CSS CDN for testing -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<div class="p-8 bg-gray-100 min-h-screen">
+  <div class="max-w-md mx-auto bg-white p-6 rounded-lg shadow space-y-4">
+    <div class="max-w-md mx-auto mb-4">
+      <a
+        href="{% url 'kgraph:info' category_id %}"
+        class="inline-block text-blue-600 hover:text-blue-800 font-medium"
+      >
+        ← Back
+      </a>
+    </div>
+
+    <form
+      action="{% url 'kgraph:increment_category' category_id %}"
+      method="post"
+      class="space-y-4"
+    >
+      {% csrf_token %}
+      <div>
+        <label
+          for="id_choice"
+          class="block text-lg font-semibold text-gray-800 mb-2"
+          >{{ question }}</label
+        >
+        <select
+          name="choice"
+          id="id_choice"
+          required
+          class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring focus:ring-blue-400"
+        >
+          <option value="correct_answer">{{ correct_answer }}</option>
+          <option value="wrong_answer_1">{{ wrong_answer_1 }}</option>
+          <option value="wrong_answer_2">{{ wrong_answer_2 }}</option>
+        </select>
+      </div>
+
+      <input
+        type="submit"
+        value="Submit"
+        class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+      />
+
+      <div class="text-center text-sm text-blue-700 mt-4">
+        <a
+          href="{{ website_link }}"
+          target="_blank"
+          class="underline hover:text-blue-900"
+        >
+          {{ website_link }}
+        </a>
+      </div>
+    </form>
+  </div>
+</div>

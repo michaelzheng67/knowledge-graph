@@ -1,7 +1,5 @@
-from django.http import HttpResponse, HttpResponseRedirect
-from django.template import loader
-from django.shortcuts import get_object_or_404, render
-from django.db.models import F
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
 from django.urls import reverse
 from django.views import generic
 
@@ -12,42 +10,6 @@ from .models import Question, Choice, Category, Info
 import random
 import json
 
-class IndexView(generic.ListView):
-    template_name = "kgraph/index.html"
-    context_object_name = "latest_question_list"
-    
-    def get_queryset(self):
-        return Question.objects.order_by("-pub_date")[:5]
-    
-
-class DetailView(generic.DetailView):
-    model = Question
-    template_name = "kgraph/detail.html"
-
-
-class ResultsView(generic.DetailView):
-    model = Question
-    template_name = "kgraph/results.html"
-
-def vote(request, question_id):
-    question = get_object_or_404(Question, pk=question_id)
-    try:
-        selected_choice = question.choice_set.get(pk=request.POST["choice"])
-    except (KeyError, Choice.DoesNotExist):
-        return render(
-                    request, 
-                    "kgraph/detail.html",
-                    {
-                        "question" : question,
-                        "error_message" : "You didn't select a choice.",
-                    },
-                ) 
-    else:
-        selected_choice.votes = F("votes") + 1
-        selected_choice.save()
-        return HttpResponseRedirect(reverse("kgraph:results", args=(question.id,)))
-
-################
 '''
 Helper functions
 '''
@@ -117,6 +79,8 @@ def CategoryView(request):
         "topic_to_id" : json.dumps(topic_to_id),
     })
 
+class GetHelpView(generic.TemplateView):
+    template_name = "kgraph/get_help.html"
 
 class InfoView(generic.DetailView):
     model = Category

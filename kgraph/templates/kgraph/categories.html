@@ -1,5 +1,10 @@
+<script src="https://cdn.tailwindcss.com"></script>
+
 <head>
-  <!-- Vis.js CDN -->
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Vis.js -->
   <link
     href="https://unpkg.com/vis-network/styles/vis-network.css"
     rel="stylesheet"
@@ -7,9 +12,36 @@
   <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
 </head>
 
-{% if nodes %}
-<body>
-  <div id="network"></div>
+<body
+  class="bg-gray-100 min-h-screen flex flex-col items-center justify-center p-6"
+>
+  {% if nodes %}
+  <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">
+    Knowledge Graph
+  </h1>
+  <div
+    class="w-full max-w-6xl h-[600px] bg-white rounded-lg shadow-lg border p-4"
+  >
+    <div id="network" class="w-full h-full"></div>
+  </div>
+
+  <div class="mt-6 flex flex-col sm:flex-row gap-4 justify-center">
+    <a href="{% url 'kgraph:create_category' %}">
+      <button
+        class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition w-full sm:w-auto"
+      >
+        ➕ Create Category
+      </button>
+    </a>
+
+    <a href="{% url 'kgraph:get_help' %}">
+      <button
+        class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition w-full sm:w-auto"
+      >
+        🤨 Get Help
+      </button>
+    </a>
+  </div>
 
   <script>
     const nodes = new vis.DataSet({{ nodes|safe }});
@@ -34,21 +66,35 @@
 
     const network = new vis.Network(container, data, options);
 
-    // 🔗 Make nodes clickable using topic string
+    // Make nodes clickable
     network.on("click", function (params) {
       if (params.nodes.length === 1) {
         const category_id = params.nodes[0];
         if (category_id) {
-          window.location.href = `/kgraph/categories/${category_id}`;
+          window.location.href = `/kgraph/${category_id}`;
         }
       }
     });
   </script>
-</body>
-{% else %}
-<p>No categories are available.</p>
-{% endif %}
 
-<a href="{% url 'kgraph:create_category' %}">
-  <button>Create Category</button>
-</a>
+  {% else %}
+  <div class="mt-6 flex flex-col sm:flex-row gap-4 justify-center">
+    <a href="{% url 'kgraph:create_category' %}">
+      <button
+        class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition w-full sm:w-auto"
+      >
+        ➕ Create Category
+      </button>
+    </a>
+
+    <a href="{% url 'kgraph:get_help' %}">
+      <button
+        class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition w-full sm:w-auto"
+      >
+        🤨 Get Help
+      </button>
+    </a>
+  </div>
+
+  {% endif %}
+</body>
