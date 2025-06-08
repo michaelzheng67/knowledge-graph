@@ -5,7 +5,7 @@ from django.views import generic
 
 from .ml import get_question_answer, get_similarity_score
 
-from .models import Question, Choice, Category, Info
+from .models import Category, Info
 
 import random
 import json
@@ -67,7 +67,6 @@ def CategoryView(request):
             edges.append({
                 "from" : category.id,
                 "to" : topic_to_id[category.neighbour_node],
-                "label" : str(category.neighbour_node_weight),
                 "width" : get_node_width(category),
                 "length": get_edge_length(category)
             })
@@ -117,25 +116,17 @@ def create_new_category(request):
 
 
 def delete_category(request, category_id):
+
     selected_category = Category.objects.get(id=category_id)
-
-    categories = list(Category.objects.all())
-    
-    # optimization: typically a node has few neighbours, so we narrow down the
-    # search space to only those that have the deleted category as a neighbour
-    to_update = []
-    for c in categories:
-        if c.neighbour_node == selected_category.topic:
-            to_update.append(c)
-
     selected_category.delete()
 
-    for node in to_update:
+    categories = list(Category.objects.all())
+    for node in categories:
         node.neighbour_node = ""
         node.neighbour_node_weight = 0
 
         for nei in categories:
-            if node != nei and nei != selected_category.topic:
+            if node != nei:
                 tmp_weight = get_similarity_score(node.topic, nei.topic)
 
                 if tmp_weight > node.neighbour_node_weight:
