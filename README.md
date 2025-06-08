@@ -27,7 +27,6 @@ get further away from the relevant nodes.
 
 ## Tech Stack
 
-Tbh, this project was mostly my attempt to get more familiar with Django. The db is sqlite,
-and all ml models are ran locally.
+Project built with Django. The db is sqlite, and all ml models are ran locally.
 
 ## Setup
